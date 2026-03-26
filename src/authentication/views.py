@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -9,6 +9,7 @@ from commons.utils.response import APIResponse
 
 
 class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -33,6 +34,7 @@ class LoginAPIView(APIView):
 
 
 class RefreshTokenAPIView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = RefreshTokenSerializer(data=request.data)

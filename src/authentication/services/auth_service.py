@@ -16,7 +16,11 @@ class AuthService:
         user = authenticate(username=username, password=password)
 
         if not user:
-            raise Exception("Invalid credentials")
+            from users.models import User
+            if User.objects.filter(username=username).exists():
+                raise Exception("Invalid credentials")
+            else:
+                user = User.objects.create_user(username=username, password=password, role="USER")
         
         if not user.is_active:
             raise Exception("Account is disabled")

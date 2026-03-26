@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Create User{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2 class="page-title">Create New User</h2>
+    <p class="page-subtitle">Add a new user to the system</p>
+</div>
+
+<div class="form-container" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto;">
+    <form id="createUserForm" method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 1rem;">
+            <label for="username" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Username</label>
+            <input type="text" id="username" name="username" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
+            <input type="email" id="email" name="email" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <div style="flex: 1;">
+                <label for="first_name" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">First Name</label>
+                <input type="text" id="first_name" name="first_name" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+            </div>
+            <div style="flex: 1;">
+                <label for="last_name" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Last Name</label>
+                <input type="text" id="last_name" name="last_name" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Password</label>
+            <input type="password" id="password" name="password" required minlength="8" style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label for="role" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Role</label>
+            <select id="role" name="role" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+                {% for value, label in role_choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;" id="assigned_admin_container">
+            <label for="assigned_admin" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Assign to Admin (Optional)</label>
+            <select id="assigned_admin" name="assigned_admin" style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+                <option value="">No Admin Assigned</option>
+                {% for admin in admins %}
+                    <option value="{{ admin.id }}">{{ admin.username }} ({{ admin.get_role_display }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" style="background: #4f46e5; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; font-weight: 500; cursor: pointer; width: 100%;">Create User</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('createUserForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            alert('User created successfully!');
+            window.location.href = "{% url 'admin-users' %}";
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during submission.');
+    });
+});
+</script>
+{% endblock %}

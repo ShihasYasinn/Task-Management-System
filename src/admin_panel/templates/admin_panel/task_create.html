@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Create Task{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2 class="page-title">Create New Task</h2>
+    <p class="page-subtitle">Assign a new task to a user</p>
+</div>
+
+<div class="form-container" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto;">
+    <form id="createTaskForm" method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 1rem;">
+            <label for="title" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Title</label>
+            <input type="text" id="title" name="title" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Description</label>
+            <textarea id="description" name="description" rows="4" style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;"></textarea>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label for="assigned_to" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Assign To</label>
+            <select id="assigned_to" name="assigned_to" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+                <option value="">Select a user...</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }} ({{ user.get_role_display }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label for="priority" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Priority</label>
+            <select id="priority" name="priority" style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+                {% for value, label in priority_choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label for="due_date" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Due Date</label>
+            <input type="date" id="due_date" name="due_date" required style="width: 100%; padding: 0.75rem; border: 1px solid #e1e4e8; border-radius: 4px;">
+        </div>
+        
+        <button type="submit" style="background: #4f46e5; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; font-weight: 500; cursor: pointer; width: 100%;">Create Task</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('createTaskForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // In order for JSONResponse to be clean or work properly
+    const formData = new FormData(this);
+    
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            alert('Task created successfully!');
+            window.location.href = "{% url 'admin-tasks' %}";
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during submission.');
+    });
+});
+</script>
+{% endblock %}
