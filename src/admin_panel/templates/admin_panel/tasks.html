@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2 class="page-title">Tasks Management</h2>
+    <p class="page-subtitle">Monitor and manage all tasks in the system</p>
+</div>
+
+<div class="table-container">
+    {% if tasks %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Assigned To</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Hours Worked</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>
+                        <strong>{{ task.title }}</strong>
+                        {% if task.description %}
+                            <br><small style="color: #666;">{{ task.description|truncatechars:60 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong>{{ task.assigned_to.username }}</strong>
+                        <br><small style="color: #666;">{{ task.assigned_to.get_role_display }}</small>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{{ task.status|lower|cut:' '|cut:'_' }}">
+                            {{ task.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ task.due_date|date:"M d, Y" }}
+                        {% now "Y-m-d" as today %}
+                        {% if task.due_date|date:"Y-m-d" < today and task.status != "COMPLETED" %}
+                            <br><small style="color: #dc3545; font-weight: 500;">Overdue</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.worked_hours %}
+                            {{ task.worked_hours }} hrs
+                        {% else %}
+                            <span style="color: #666;">Not logged</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.completion_report %}
+                            <details style="cursor: pointer;">
+                                <summary style="color: #667eea; font-weight: 500;">View Report</summary>
+                                <div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9ff; border-radius: 4px; font-size: 0.85rem;">
+                                    {{ task.completion_report|truncatechars:200 }}
+                                </div>
+                            </details>
+                        {% else %}
+                            <span style="color: #666;">No report</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <h3>No Tasks Found</h3>
+            <p>There are no tasks in the system yet.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
