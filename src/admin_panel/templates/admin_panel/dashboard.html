@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="breadcrumb">
-    🏠 / <span>Dashboard</span> / Overview
+    Home / <span>Dashboard</span> / Overview
 </div>
 
 <h2 class="page-title" style="margin-bottom: 2rem;">System Dashboard</h2>
@@ -190,7 +190,7 @@
                 </a>
                 {% if user.role == "SUPERADMIN" or user.is_superuser %}
                 <a href="/admin-panel/users/create/" class="btn-primary" style="text-align: center; text-decoration: none; background: var(--primary-dark);">
-                    👤 Add User
+                    Add User
                 </a>
                 {% endif %}
             </div>

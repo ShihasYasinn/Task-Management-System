@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Support{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2 class="page-title">Support</h2>
+    <p class="page-subtitle">Get help with the Task Management System</p>
+</div>
+
+<div class="card" style="max-width: 800px; margin: 0 auto; text-align: center; padding: 4rem 2rem;">
+    <h3 style="font-size: 1.5rem; color: var(--text-dark); margin-bottom: 1rem;">Need Assistance?</h3>
+    <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem;">
+        If you are experiencing any issues or have questions about using the system, please contact our support team.
+    </p>
+    
+    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; display: inline-block; text-align: left; border: 1px solid var(--border-color);">
+        <p style="margin-bottom: 0.5rem;"><strong>Email:</strong> support@taskmanagement.com</p>
+        <p style="margin-bottom: 0.5rem;"><strong>Phone:</strong> +1 (555) 123-4567</p>
+        <p><strong>Hours:</strong> Mon-Fri, 9:00 AM - 5:00 PM EST</p>
+    </div>
+    
+    <div style="margin-top: 3rem;">
+        <h4 style="margin-bottom: 1rem; color: var(--primary-teal);">Frequently Asked Questions</h4>
+        <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+            <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                <strong>How do I reset my password?</strong>
+                <p style="color: var(--text-muted); margin-top: 0.25rem;">Contact your system administrator to have them reset your password from the Users panel.</p>
+            </div>
+            <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                <strong>How do I change a task status?</strong>
+                <p style="color: var(--text-muted); margin-top: 0.25rem;">You can update task status through the main application interface or request an admin to update it.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
