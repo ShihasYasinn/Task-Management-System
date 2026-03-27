@@ -396,31 +396,31 @@
             <ul class="nav-list">
                 <li class="nav-item">
                     <a href="/admin-panel/" class="nav-link" id="nav-dashboard">
-                        <span class="nav-icon">📊</span> Dashboard
+                        <span class="nav-icon"></span> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="/admin-panel/users/" class="nav-link" id="nav-users">
-                        <span class="nav-icon">👥</span> Users
+                        <span class="nav-icon"></span> Users
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="/admin-panel/tasks/" class="nav-link" id="nav-tasks">
-                        <span class="nav-icon">📋</span> Tasks
+                        <span class="nav-icon"></span> Tasks
                     </a>
                 </li>
                 
                 <div class="menu-label" style="margin-top: 1.5rem;">Actions</div>
                 <li class="nav-item">
                     <a href="/admin-panel/tasks/create/" class="nav-link" id="nav-task-create">
-                        <span class="nav-icon">➕</span> Create Task
+                        <span class="nav-icon"></span> Create Task
                     </a>
                 </li>
                 {% if user.is_authenticated %}
                     {% if user.role == "SUPERADMIN" or user.is_superuser %}
                     <li class="nav-item">
                         <a href="/admin-panel/users/create/" class="nav-link" id="nav-user-create">
-                            <span class="nav-icon">👤</span> Create User
+                            <span class="nav-icon"></span> Create User
                         </a>
                     </li>
                     {% endif %}
@@ -438,8 +438,8 @@
                 <h2><!-- Dashboard branding or space can go here --></h2>
             </div>
             <div class="header-right">
-                <span>💬 Support</span>
-                <span>🔔</span>
+                <a href="{% url 'admin-profile' %}">Profile</a>
+                <a href="{% url 'admin-support' %}">Support</a>
                 {% if user.is_authenticated %}
                 <a href="{% url 'admin-logout' %}" class="btn-logout">Logout</a>
                 {% endif %}
@@ -454,8 +454,40 @@
         
     </div>
 
+    <!-- Custom Alert Modal -->
+    <div id="customAlertOverlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; width: 90%; text-align: center;">
+            <h3 id="customAlertTitle" style="color: var(--primary-teal); margin-bottom: 1rem; font-size: 1.25rem;">Notification</h3>
+            <p id="customAlertMessage" style="color: var(--text-dark); margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.5;"></p>
+            <button onclick="closeCustomAlert()" class="btn-primary" style="width: 100%;">OK</button>
+        </div>
+    </div>
+
     <!-- Active Navigation Script -->
     <script>
+        let customAlertRedirect = null;
+        
+        function showCustomAlert(message, title="Notification", redirectUrl=null) {
+            document.getElementById('customAlertTitle').innerText = title;
+            document.getElementById('customAlertMessage').innerText = message;
+            
+            if (title === "Error") {
+                document.getElementById('customAlertTitle').style.color = "#e74c3c";
+            } else {
+                document.getElementById('customAlertTitle').style.color = "var(--primary-teal)";
+            }
+            
+            document.getElementById('customAlertOverlay').style.display = 'flex';
+            customAlertRedirect = redirectUrl;
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertOverlay').style.display = 'none';
+            if (customAlertRedirect) {
+                window.location.href = customAlertRedirect;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const currentPath = window.location.pathname;
             const linkMap = {

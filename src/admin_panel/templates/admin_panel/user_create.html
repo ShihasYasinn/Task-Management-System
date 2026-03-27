@@ -77,15 +77,13 @@ document.getElementById('createUserForm').addEventListener('submit', function(e)
     .then(response => response.json())
     .then(data => {
         if(data.success) {
-            alert('User created successfully!');
-            window.location.href = "{% url 'admin-users' %}";
+            showCustomAlert('User created successfully!', 'Success', "{% url 'admin-users' %}");
         } else {
-            alert('Error: ' + data.error);
+            showCustomAlert('Error: ' + data.error, 'Error');
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred during submission.');
+        showCustomAlert('An error occurred during submission.', 'Error');
     });
 });
 </script>

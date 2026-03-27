@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2 class="page-title">My Profile</h2>
+    <p class="page-subtitle">View your account details</p>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+    <div style="display: flex; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--bg-light); border: 2px solid var(--primary-teal); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: var(--primary-teal); margin-right: 1.5rem;">
+            {{ user.username|make_list|first|upper }}
+        </div>
+        <div>
+            <h3 style="font-size: 1.5rem; color: var(--text-dark); margin-bottom: 0.25rem;">{{ user.username }}</h3>
+            <span class="role-badge role-{{ user.role|lower|default:'user' }}">{{ user.get_role_display|default:user.role }}</span>
+        </div>
+    </div>
+    
+    <div style="display: grid; gap: 1.5rem;">
+        <div>
+            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 0.25rem;">Email Address</label>
+            <div style="font-size: 1.1rem; color: var(--text-dark); font-weight: 500;">
+                {{ user.email|default:"Not provided" }}
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 0.25rem;">First Name</label>
+                <div style="font-size: 1.1rem; color: var(--text-dark); font-weight: 500;">
+                    {{ user.first_name|default:"Not provided" }}
+                </div>
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 0.25rem;">Last Name</label>
+                <div style="font-size: 1.1rem; color: var(--text-dark); font-weight: 500;">
+                    {{ user.last_name|default:"Not provided" }}
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 0.25rem;">Date Joined</label>
+            <div style="font-size: 1.1rem; color: var(--text-dark); font-weight: 500;">
+                {{ user.date_joined|date:"F j, Y" }}
+            </div>
+        </div>
+        
+        <div>
+            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 0.25rem;">Account Status</label>
+            <div>
+                {% if user.is_active %}
+                    <span class="status-badge status-completed">Active</span>
+                {% else %}
+                    <span class="status-badge status-pending">Inactive</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

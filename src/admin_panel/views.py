@@ -212,3 +212,15 @@ def user_create(request):
             return JsonResponse({'success': True, 'message': 'User created successfully'})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
+
+
+@user_passes_test(is_admin_or_superadmin, login_url='admin-login')
+def support(request):
+    """Simple support page view"""
+    return render(request, "admin_panel/support.html")
+
+
+@user_passes_test(is_admin_or_superadmin, login_url='admin-login')
+def profile(request):
+    """User profile view"""
+    return render(request, "admin_panel/profile.html")
